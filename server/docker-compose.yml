@@ -28,7 +28,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432" # แมพพอร์ต 5432 ของ container ไปยัง host
+      - "5433:5432" # แมพพอร์ต 5432 ของ container ไปยัง host
     volumes:
       - postgres_data:/var/lib/postgresql/data # ใช้ชื่อ volume ที่ถูกต้อง
 

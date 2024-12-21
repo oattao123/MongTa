@@ -5,3 +5,6 @@ docker-compose up
 
 use postgres in docker
 docker exec -it <container_name> psql -U postgres
+
+watch CONTAINER ID
+docker ps

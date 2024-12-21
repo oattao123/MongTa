@@ -1,0 +1,2 @@
+run ai_api in local
+uvicorn ai_api:app --reload

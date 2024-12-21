@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api # ชี้ไปที่โฟลเดอร์ api
+    ports:
+      - "3000:3000" # แมพพอร์ต 3000 ของ container ไปยัง host
+    volumes:
+      - ./api:/api # ซิงค์ไฟล์ในโฟลเดอร์ api กับ container
+      - /api/node_modules # ยกเว้นการซิงค์ node_modules
+    environment:
+      NODE_ENV: development
+
+  ai_api:
+    build:
+      context: ./ai_api # ชี้ไปที่โฟลเดอร์ ai_api
+    ports:
+      - "8000:8000" # แมพพอร์ต 8000 ของ container ไปยัง host
+    volumes:
+      - ./ai_api:/ai_api # ซิงค์ไฟล์ในโฟลเดอร์ ai_api กับ container
+    command: ["uvicorn", "ai_api:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432" # แมพพอร์ต 5432 ของ container ไปยัง host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # ใช้ชื่อ volume ที่ถูกต้อง
+
+volumes:
+  postgres_data: # กำหนดชื่อ volume ให้ตรง
+    driver: local

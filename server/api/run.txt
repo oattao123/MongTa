@@ -1,0 +1,2 @@
+run node in local
+npm run dev

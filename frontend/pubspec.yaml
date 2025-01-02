@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   curved_navigation_bar: ^1.0.6
   flutter_svg: ^2.0.16
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:

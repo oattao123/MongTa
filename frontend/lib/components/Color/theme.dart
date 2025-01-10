@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 // const color for background theme, navbar and others
-class Theme {
+class MainTheme {
   // Background
   static const Color mainBackground = Color.fromRGBO(252, 252, 252, 1);
 
   // navbar
   static const Color navbarBackground = Color.fromRGBO(252, 252, 252, 1);
+  static const Color navbarBackground2 = Color.fromRGBO(235, 235, 235, 1);
   static const Color navbarText = Color.fromRGBO(179, 179, 179, 1);
   static const Color navbarFocusText = Color.fromRGBO(18, 53, 143, 1);
 
@@ -37,7 +38,14 @@ class Theme {
   static const Color buttonText = Color.fromRGBO(255, 255, 255, 1);
   static const Color placeholderText = Color.fromRGBO(179, 179, 179, 1);
 
+  // text field
+  static const Color textfieldBorder = Color.fromRGBO(179, 179, 179, 1);
+  static const Color textfieldFocus = Color.fromRGBO(18, 53, 143, 1);
+  static const Color textfieldBackground = Color.fromRGBO(255, 255, 255, 1);
+
   // misc
+  static const Color white = Color.fromRGBO(255, 255, 255, 1);
+  static const Color logoBorder = Color.fromRGBO(217, 217, 217, 1);
   // static const Color test = Colors.blue;
   // static const Color test2 = Colors.pink;
 

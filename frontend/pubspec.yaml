@@ -38,6 +38,7 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   flutter_svg: ^2.0.16
   badges: ^3.1.2
+  iconify_flutter: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +84,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: BaiJamjuree
+      fonts:
+        - asset: assets/fonts/BaiJamjuree-Regular.ttf
+        - asset: assets/fonts/BaiJamjuree-Bold.ttf
+        - asset: assets/fonts/BaiJamjuree-SemiBold.ttf  
+        - asset: assets/fonts/BaiJamjuree-Medium.ttf
+          weight: 500
+        
   # fonts:
   #   - family: Schyler
   #     fonts:

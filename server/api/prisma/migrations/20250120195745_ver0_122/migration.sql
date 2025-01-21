@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "chat" ALTER COLUMN "timestamp" SET DATA TYPE TIMESTAMP(6);

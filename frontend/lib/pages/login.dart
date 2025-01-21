@@ -5,21 +5,6 @@ import 'package:frontend/components/EntryForm/entry_button.dart';
 import 'package:frontend/components/EntryForm/entry_textfield.dart';
 import 'package:iconify_flutter/icons/bxs.dart';
 
-void main() => runApp(const MyApp());
-
-/// TODO: รอ router เสร็จเดียวลบและแก้ widget นี้ให้หมดทุกหน้า
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    );
-  }
-}
-
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 

@@ -33,6 +33,43 @@ def predict():
         image = cv2.imread(image_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+        # Check if predictions are empty
+        if not predictions['predictions']:
+            # Define the approximate bounding box for the eyes
+            height, width, _ = image.shape
+            eye_x1, eye_y1 = int(width * 0.3), int(height * 0.4)
+            eye_x2, eye_y2 = int(width * 0.7), int(height * 0.6)
+
+            # Create an overlay with "Normal" text and rectangle around the eyes
+            plt.figure(figsize=(10, 10))
+            plt.imshow(image)
+
+            # Draw rectangle around the eyes
+            plt.gca().add_patch(
+                plt.Rectangle((eye_x1, eye_y1), eye_x2 - eye_x1, eye_y2 - eye_y1, 
+                              linewidth=2, edgecolor='blue', facecolor='none')
+            )
+
+            # Add "Normal" text near the rectangle
+            plt.text(
+                eye_x1, eye_y1 - 20, "Normal", fontsize=20, color='blue', 
+                bbox=dict(facecolor='white', edgecolor='blue', boxstyle='round,pad=0.5')
+            )
+
+            plt.axis('off')
+
+            # Save the output image
+            output_path = "output.jpg"
+            plt.savefig(output_path, bbox_inches='tight', pad_inches=0)
+            plt.close()
+
+            # Send the output image back to the client
+            with open(output_path, "rb") as f:
+                img_bytes = io.BytesIO(f.read())
+
+            return send_file(img_bytes, mimetype='image/jpeg')
+
+
         # Plot the image with bounding boxes
         plt.figure(figsize=(10, 10))
         plt.imshow(image)

@@ -64,4 +64,15 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    repositories {
+        google()  // Ensure this is present
+        mavenCentral()  // Ensure this is present
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.15'  // Ensure this is added
+        // other dependencies...
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'

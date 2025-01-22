@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362470294675",
+    "project_id": "mongta-66831",
+    "storage_bucket": "mongta-66831.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362470294675:android:a49dd092c4d78462daf966",
+        "android_client_info": {
+          "package_name": "com.company.mongta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1QkKBiIfFzhddyLOGGEvRJDIKhaYsMIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

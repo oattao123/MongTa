@@ -16,26 +16,25 @@ app.post("/api/sendchat", sendchat)
 app.get("/api/chat/:id/:user_id", chatlog)
 app.get("/api/chathistory/:id", chathistory)
 
-const io = new Server(appServer, {
+export const io = new Server(appServer, {
   cors: {
       origin: "http://localhost:3000"
   }
 })
 
-io.on("connection", (socket) => {
-  
-  socket.on("join", (conversationid: string, userid: string) => {
-    socket.join(conversationid)
-    console.log(`${userid} joined room: ${conversationid}`);
+io.on('connection', (socket) => {
 
-    socket.to(conversationid).emit("userJoined", { userid });
-
-    socket.on("sendMessage", (messageData: { senderId: string, message: string }) => {
+  socket.on('join', (conversation_id: string, user_id: string) => {
+      socket.join(conversation_id);
+      console.log(`${user_id} joined room: ${conversation_id}`);
       
-      socket.to(conversationid).emit("newMessage", messageData);
-    })
-  })
-})
+      socket.to(conversation_id).emit('User joined', { user_id });
+
+      socket.on('sendMessage', (messageData: { sender_id: string, message: string }) => {
+          socket.to(conversation_id).emit('newMessage', messageData);
+      });
+  });
+});
 
 
 app.get("/", (req: Request, res: Response) => {

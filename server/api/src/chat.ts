@@ -1,5 +1,6 @@
 import { Response,Request } from "express";
 import { prismadb } from "./lib/db";
+import { io } from '../src/index'
 
 export const createchat = async (req: Request, res: Response) =>  {
     try {
@@ -64,6 +65,8 @@ export const createchat = async (req: Request, res: Response) =>  {
             }
         })
 
+        io.emit('newChat', { user_id, ophthaid, conversation_id: create.id });
+        
         res.status(201).send({
             create,
             message: "Chat created successfully"
@@ -105,22 +108,11 @@ export const sendchat = async (req:Request, res:Response) => {
             }
         })
 
-        await prismadb.chat.updateMany({
-            where: {
-                AND: [
-                    { conversation_id: parseInt(conversation_id) },
-                    { sender_id: parseInt(sender_id) },
-                    {
-                        id: {
-                        not: send.id
-                    }
-                }
-                ]
-            },
-            data: {
-                status: 'read'
-            }
-        })
+        io.to(conversation_id).emit('newMessage', {
+            sender_id,
+            message,
+            timestamp,
+        });
 
         res.status(201).send({
             send,
@@ -141,16 +133,7 @@ export const chatlog = async (req:Request, res:Response) => {
     try {
         const { id, user_id } = req.params
 
-        type Chat = {
-            id: number
-            chat: string
-            timestamp: Date
-            status: string
-            sender_id: number
-            conversation_id: number
-        }
-
-        const chatlog:Chat[] = await prismadb.chat.findMany({
+        const chatlog = await prismadb.chat.findMany({
             where: {
                 conversation_id:parseInt(id)
             },
@@ -174,19 +157,24 @@ export const chatlog = async (req:Request, res:Response) => {
             })
             return
         }
-        
-        const latest_chat = chatlog[0]
+    
+        // await prismadb.chat.updateMany({
+        //     where: {
+        //         AND: [
+        //             { conversation_id: parseInt(id) },
+        //             { sender_id: parseInt() },
+        //             {
+        //                 id: {
+        //                 not: send.id
+        //             }
+        //         }
+        //         ]
+        //     },
+        //     data: {
+        //         status: 'read'
+        //     }
+        // })
 
-        if (latest_chat.sender_id !== parseInt(user_id) && latest_chat.status === 'delivered') {
-            await prismadb.chat.update({
-                where: {
-                    id:latest_chat.id
-                },
-                data:{
-                    status: 'read'
-                }
-            })
-        }
 
         res.status(200).send({
             chatlog,

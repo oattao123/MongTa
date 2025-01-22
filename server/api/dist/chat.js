@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.chathistory = exports.chatlog = exports.sendchat = exports.createchat = void 0;
 const db_1 = require("./lib/db");
+const index_1 = require("../src/index");
 const createchat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { user_id, ophthaid } = req.body;
@@ -70,6 +71,7 @@ const createchat = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 ophthalmologist_id: ophthaid
             }
         });
+        index_1.io.emit('newChat', { user_id, ophthaid, conversation_id: create.id });
         res.status(201).send({
             create,
             message: "Chat created successfully"
@@ -107,21 +109,10 @@ const sendchat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 status: 'delivered'
             }
         });
-        yield db_1.prismadb.chat.updateMany({
-            where: {
-                AND: [
-                    { conversation_id: parseInt(conversation_id) },
-                    { sender_id: parseInt(sender_id) },
-                    {
-                        id: {
-                            not: send.id
-                        }
-                    }
-                ]
-            },
-            data: {
-                status: 'read'
-            }
+        index_1.io.to(conversation_id).emit('newMessage', {
+            sender_id,
+            message,
+            timestamp,
         });
         res.status(201).send({
             send,
@@ -164,17 +155,22 @@ const chatlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             return;
         }
-        const latest_chat = chatlog[0];
-        if (latest_chat.sender_id !== parseInt(user_id) && latest_chat.status === 'delivered') {
-            yield db_1.prismadb.chat.update({
-                where: {
-                    id: latest_chat.id
-                },
-                data: {
-                    status: 'read'
-                }
-            });
-        }
+        // await prismadb.chat.updateMany({
+        //     where: {
+        //         AND: [
+        //             { conversation_id: parseInt(id) },
+        //             { sender_id: parseInt() },
+        //             {
+        //                 id: {
+        //                 not: send.id
+        //             }
+        //         }
+        //         ]
+        //     },
+        //     data: {
+        //         status: 'read'
+        //     }
+        // })
         res.status(200).send({
             chatlog,
             success: true,

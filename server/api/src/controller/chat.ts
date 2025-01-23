@@ -1,6 +1,6 @@
 import { Response,Request } from "express";
-import { prismadb } from "./lib/db";
-import { io } from '../src/index'
+import { prismadb } from "../lib/db";
+import { io } from '../index'
 
 export const createchat = async (req: Request, res: Response) =>  {
     try {
@@ -82,7 +82,6 @@ export const createchat = async (req: Request, res: Response) =>  {
     }
 }
 
-
 export const sendchat = async (req:Request, res:Response) => {
     try {
         const { conversation_id, sender_id, message} = req.body
@@ -90,6 +89,24 @@ export const sendchat = async (req:Request, res:Response) => {
             res.status(400).json({
                 success: false,
                 message: "Missing required inputs."
+            })
+            return
+        }
+
+        const check_chat = await prismadb.conversation.findFirst({
+          where: {
+            id: conversation_id
+          },
+          select: {
+            user_id: true,
+            ophthalmologist_id: true
+          }  
+        })
+
+        if (check_chat?.ophthalmologist_id !== sender_id && check_chat?.user_id !== sender_id) {
+            res.status(404).send({
+                succuess: false,
+                message: "You are not authorized to send in this chat."
             })
             return
         }
@@ -133,12 +150,36 @@ export const chatlog = async (req:Request, res:Response) => {
     try {
         const { id, user_id } = req.params
 
+        const check_chat = await prismadb.chat.findMany({
+            where: {
+                conversation_id:parseInt(id)
+            }
+        })
+
+        if (check_chat.length <= 0) {
+            res.status(404).json({
+                success: false,
+                message: "Chat did not exist."
+            })
+            return
+        }
+        
+        await prismadb.chat.updateMany({
+            where: {
+                    conversation_id: parseInt(id),
+                    status: 'delivered',
+                    sender_id: { not: parseInt(user_id) }
+            },
+            data: {
+                status: 'read'
+            }
+        })
+
         const chatlog = await prismadb.chat.findMany({
             where: {
                 conversation_id:parseInt(id)
             },
             select: {
-                id:true,
                 chat: true,
                 timestamp: true,
                 status: true,
@@ -149,32 +190,6 @@ export const chatlog = async (req:Request, res:Response) => {
                 timestamp: 'desc'
             }
         })
-
-        if (chatlog.length <= 0) {
-            res.status(404).json({
-                success: false,
-                message: "Chat did not exist."
-            })
-            return
-        }
-    
-        // await prismadb.chat.updateMany({
-        //     where: {
-        //         AND: [
-        //             { conversation_id: parseInt(id) },
-        //             { sender_id: parseInt() },
-        //             {
-        //                 id: {
-        //                 not: send.id
-        //             }
-        //         }
-        //         ]
-        //     },
-        //     data: {
-        //         status: 'read'
-        //     }
-        // })
-
 
         res.status(200).send({
             chatlog,
@@ -206,7 +221,7 @@ export const chathistory = async (req:Request, res:Response) => {
                 is_opthamologist: true
             }
         })
-        if (user?.is_opthamologist) {
+        if ( user?.is_opthamologist ) {
             const conversation = await prismadb.conversation.findMany({
                 where: {
                     ophthalmologist_id: parseInt(id)

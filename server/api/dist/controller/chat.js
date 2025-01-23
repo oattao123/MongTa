@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.chathistory = exports.chatlog = exports.sendchat = exports.createchat = void 0;
-const db_1 = require("./lib/db");
-const index_1 = require("../src/index");
+const db_1 = require("../lib/db");
+const index_1 = require("../index");
 const createchat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { user_id, ophthaid } = req.body;
@@ -97,6 +97,22 @@ const sendchat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             return;
         }
+        const check_chat = yield db_1.prismadb.conversation.findFirst({
+            where: {
+                id: conversation_id
+            },
+            select: {
+                user_id: true,
+                ophthalmologist_id: true
+            }
+        });
+        if ((check_chat === null || check_chat === void 0 ? void 0 : check_chat.ophthalmologist_id) !== sender_id && (check_chat === null || check_chat === void 0 ? void 0 : check_chat.user_id) !== sender_id) {
+            res.status(404).send({
+                succuess: false,
+                message: "You are not authorized to send in this chat."
+            });
+            return;
+        }
         const now = new Date();
         const timeZoneOffset = 7 * 60;
         const timestamp = new Date(now.getTime() + timeZoneOffset * 60000);
@@ -132,12 +148,33 @@ exports.sendchat = sendchat;
 const chatlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id, user_id } = req.params;
+        const check_chat = yield db_1.prismadb.chat.findMany({
+            where: {
+                conversation_id: parseInt(id)
+            }
+        });
+        if (check_chat.length <= 0) {
+            res.status(404).json({
+                success: false,
+                message: "Chat did not exist."
+            });
+            return;
+        }
+        yield db_1.prismadb.chat.updateMany({
+            where: {
+                conversation_id: parseInt(id),
+                status: 'delivered',
+                sender_id: { not: parseInt(user_id) }
+            },
+            data: {
+                status: 'read'
+            }
+        });
         const chatlog = yield db_1.prismadb.chat.findMany({
             where: {
                 conversation_id: parseInt(id)
             },
             select: {
-                id: true,
                 chat: true,
                 timestamp: true,
                 status: true,
@@ -148,29 +185,6 @@ const chatlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 timestamp: 'desc'
             }
         });
-        if (chatlog.length <= 0) {
-            res.status(404).json({
-                success: false,
-                message: "Chat did not exist."
-            });
-            return;
-        }
-        // await prismadb.chat.updateMany({
-        //     where: {
-        //         AND: [
-        //             { conversation_id: parseInt(id) },
-        //             { sender_id: parseInt() },
-        //             {
-        //                 id: {
-        //                 not: send.id
-        //             }
-        //         }
-        //         ]
-        //     },
-        //     data: {
-        //         status: 'read'
-        //     }
-        // })
         res.status(200).send({
             chatlog,
             success: true,

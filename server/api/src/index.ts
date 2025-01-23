@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import { Server } from "socket.io";
-import { chathistory, chatlog, createchat, sendchat } from "./chat";
+import { chathistory, chatlog, createchat, sendchat } from "./controller/chat";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const appServer = app.listen(PORT , () => {
   console.log(`Server is running on port ${PORT}`);

@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.io = void 0;
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
-const chat_1 = require("./chat");
+const chat_1 = require("./controller/chat");
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const appServer = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

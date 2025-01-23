@@ -1,4 +1,12 @@
+<<<<<<< Updated upstream
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"Copied!
+=======
+
+#include "Generated.xcconfig"
+
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
+>>>>>>> Stashed changes

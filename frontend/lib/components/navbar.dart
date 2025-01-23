@@ -2,21 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:frontend/components/Color/theme.dart';
 
-void main() => runApp(const MyApp());
-
-/// TODO: รอ router เสร็จเดียวลบและแก้ widget นี้ให้หมดทุกหน้า
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false, 
-      home: BottomNavBar(), 
-    );
-  }
-}
-
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 

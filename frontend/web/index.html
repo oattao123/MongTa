@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqCSDj6uncmfNSNQn2an_10WD2IRTpPZU"></script>
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A Flutter Google Maps app.">
+  <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -40,6 +45,8 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <script src="map.dart.js" type="application/javascript"></script>
+  <script src="flutter_bootstrap.js" async></script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

@@ -39,11 +39,8 @@ dependencies:
   badges: ^3.1.2
   iconify_flutter: ^0.0.7
   circle_nav_bar: ^2.2.0
-  firebase_core: ^2.14.0
-  firebase_storage: ^11.2.0
-  cloud_firestore: ^4.17.5
-  image_picker: ^0.8.7+4
-  socket_io_client: ^2.0.0
+  google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.2
 
 dev_dependencies:
   flutter_test:

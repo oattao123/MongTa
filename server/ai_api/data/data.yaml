@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 5
+names: ['Cataract', 'Conjunctivitis', 'Normal', 'Pterygium', 'Stye']
+
+roboflow:
+  workspace: kmutt-ajmwi
+  project: se_mongta
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/kmutt-ajmwi/se_mongta/dataset/2

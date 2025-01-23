@@ -69,7 +69,7 @@ export const createchat = async (req: Request, res: Response) =>  {
         
         res.status(201).send({
             create,
-            message: "Chat created successfully"
+            message: "Chat created successfully."
         })
 
     } catch (error) {
@@ -148,11 +148,11 @@ export const sendchat = async (req:Request, res:Response) => {
 
 export const chatlog = async (req:Request, res:Response) => {
     try {
-        const { id, user_id } = req.params
+        const { conversatio_id, user_id } = req.params
 
         const check_chat = await prismadb.chat.findMany({
             where: {
-                conversation_id:parseInt(id)
+                conversation_id:parseInt(conversatio_id)
             }
         })
 
@@ -166,7 +166,7 @@ export const chatlog = async (req:Request, res:Response) => {
         
         await prismadb.chat.updateMany({
             where: {
-                    conversation_id: parseInt(id),
+                    conversation_id: parseInt(conversatio_id),
                     status: 'delivered',
                     sender_id: { not: parseInt(user_id) }
             },
@@ -177,7 +177,7 @@ export const chatlog = async (req:Request, res:Response) => {
 
         const chatlog = await prismadb.chat.findMany({
             where: {
-                conversation_id:parseInt(id)
+                conversation_id:parseInt(conversatio_id)
             },
             select: {
                 chat: true,
@@ -209,10 +209,10 @@ export const chatlog = async (req:Request, res:Response) => {
 
 export const chathistory = async (req:Request, res:Response) => {
     try {
-        const { id } = req.params
+        const { user_id } = req.params
         const user = await prismadb.user.findFirst({
             where: {
-                id:parseInt(id)
+                id:parseInt(user_id)
             },
             select: {
                 first_name: true,
@@ -224,7 +224,7 @@ export const chathistory = async (req:Request, res:Response) => {
         if ( user?.is_opthamologist ) {
             const conversation = await prismadb.conversation.findMany({
                 where: {
-                    ophthalmologist_id: parseInt(id)
+                    ophthalmologist_id: parseInt(user_id)
                 },
                 select: {
                     id: true
@@ -282,7 +282,7 @@ export const chathistory = async (req:Request, res:Response) => {
                     (chat) =>
                         chat.conversation_id === latestchat.conversation_id &&
                         chat.status === "delivered" &&
-                        chat.sender_id !== parseInt(id)
+                        chat.sender_id !== parseInt(user_id)
                 ).length
     
                 return {
@@ -301,7 +301,7 @@ export const chathistory = async (req:Request, res:Response) => {
         } else {
             const conversation = await prismadb.conversation.findMany({
                 where: {
-                    user_id: parseInt(id)
+                    user_id: parseInt(user_id)
                 },
                 select: {
                     id: true
@@ -351,7 +351,7 @@ export const chathistory = async (req:Request, res:Response) => {
                     (chat) =>
                         chat.conversation_id === latestchat.conversation_id &&
                         chat.status === "delivered" &&
-                        chat.sender_id !== parseInt(id)
+                        chat.sender_id !== parseInt(user_id)
                 ).length
     
                 return {

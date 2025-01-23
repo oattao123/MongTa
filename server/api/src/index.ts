@@ -13,8 +13,8 @@ app.use(express.json());
 
 app.post("/api/createchat", createchat)
 app.post("/api/sendchat", sendchat)
-app.get("/api/chat/:id/:user_id", chatlog)
-app.get("/api/chathistory/:id", chathistory)
+app.get("/api/chat/:conversation_id/:user_id", chatlog)
+app.get("/api/chathistory/:user_id", chathistory)
 
 export const io = new Server(appServer, {
   cors: {
